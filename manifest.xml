@@ -13,12 +13,12 @@
   <DisplayName DefaultValue="RealEye AI CRM for Outlook"/>
   <Description DefaultValue="AI-Powered Relationship Management for Outlook."/>
 
-  <IconUrl DefaultValue="https://realeye.live/logo.png"/>
-  <HighResolutionIconUrl DefaultValue="https://realeye.live/logo.png"/>
-  <SupportUrl DefaultValue="https://realeye.live/support"/>
+  <IconUrl DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/logo.png"/>
+  <HighResolutionIconUrl DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/logo.png"/>
+  <SupportUrl DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/support"/>
 
   <AppDomains>
-    <AppDomain>https://realeye.live</AppDomain>
+    <AppDomain>https://wonderful-flower-067571610.7.azurestaticapps.net</AppDomain>
     <AppDomain>https://api.realeye.live</AppDomain>
     <AppDomain>https://login.microsoftonline.com</AppDomain>
   </AppDomains>
@@ -34,7 +34,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://realeye.live/taskpane.html"/>
+        <SourceLocation DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/taskpane.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -86,13 +86,13 @@
     
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://realeye.live/logo.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://realeye.live/logo.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://realeye.live/logo.png"/>
-        <bt:Image id="Icon.128x128" DefaultValue="https://realeye.live/logo.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/icon-80.png"/>
+        <bt:Image id="Icon.128x128" DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/icon-128.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://realeye.live/taskpane.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="RealEye AI CRM for Outlook"/>
@@ -144,13 +144,13 @@
 
       <Resources>
         <bt:Images>
-          <bt:Image id="Icon.16x16" DefaultValue="https://realeye.live/logo.png"/>
-          <bt:Image id="Icon.32x32" DefaultValue="https://realeye.live/logo.png"/>
-          <bt:Image id="Icon.80x80" DefaultValue="https://realeye.live/logo.png"/>
-          <bt:Image id="Icon.128x128" DefaultValue="https://realeye.live/logo.png"/>
+          <bt:Image id="Icon.16x16" DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/icon-16.png"/>
+          <bt:Image id="Icon.32x32" DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/icon-32.png"/>
+          <bt:Image id="Icon.80x80" DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/icon-80.png"/>
+          <bt:Image id="Icon.128x128" DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/icon-128.png"/>
         </bt:Images>
         <bt:Urls>
-          <bt:Url id="Taskpane.Url" DefaultValue="https://realeye.live/taskpane.html"/>
+          <bt:Url id="Taskpane.Url" DefaultValue="https://wonderful-flower-067571610.7.azurestaticapps.net/taskpane.html"/>
         </bt:Urls>
         <bt:ShortStrings>
           <bt:String id="GroupLabel" DefaultValue="RealEye AI CRM for Outlook"/>
@@ -160,18 +160,21 @@
           <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Open RealEye AI CRM to manage this contact."/>
         </bt:LongStrings>
       </Resources>
-  <WebApplicationInfo>
-  <Id>b47febaf-cc5b-4be3-b480-63702e916d44</Id>
- <Resource>api://realeye.live/b47febaf-cc5b-4be3-b480-63702e916d44</Resource>
-  <Scopes>
-    <Scope>Mail.Read</Scope>
-    <Scope>User.Read</Scope>
-    <Scope>access_as_user</Scope> 
-    <Scope>offline_access</Scope>
-    <Scope>openid</Scope>
-    <Scope>profile</Scope>
-  </Scopes>
-</WebApplicationInfo>
+
+      <WebApplicationInfo>
+        <Id>b47febaf-cc5b-4be3-b480-63702e916d44</Id>
+        <Resource>api://wonderful-flower-067571610.7.azurestaticapps.net/b47febaf-cc5b-4be3-b480-63702e916d44</Resource>
+        <Scopes>
+          <Scope>Mail.Read</Scope>
+          <Scope>User.Read</Scope>
+          <Scope>access_as_user</Scope> 
+          <Scope>offline_access</Scope>
+          <Scope>openid</Scope>
+          <Scope>profile</Scope>
+        </Scopes>
+      </WebApplicationInfo>
     </VersionOverrides>
   </VersionOverrides>
+
+
 </OfficeApp>
