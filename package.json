@@ -1,0 +1,14 @@
+{
+  "name": "realeye-ai-crm-addin",
+  "version": "1.0.0",
+  "description": "RealEye AI CRM Outlook Add-in",
+  "scripts": {
+    "start": "npx http-server . -p 3000 --ssl --cors",
+    "validate": "npx office-addin-manifest validate manifest.xml"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "office-addin-debugging": "^5.0.0",
+    "office-addin-dev-certs": "^1.12.0"
+  }
+}

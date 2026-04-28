@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RealEye AI CRM for Outlook</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <link rel="stylesheet" href="taskpane.css" />
+</head>
+
+<body>
+
+    <!-- Shared Header -->
+    <header class="app-header" id="app-header" style="display: none;">
+        <div class="logo-title">
+            <img src="logo.png" alt="Logo" class="logo" />
+            <div>
+                <h1>RealEye AI CRM</h1>
+                <p id="header-subtitle">AI-Powered Management</p>
+            </div>
+        </div>
+        <!-- 3-dot dropdown menu -->
+        <div class="menu-container">
+            <button id="menu-toggle" class="menu-btn">⋮</button>
+            <div id="dropdown-menu" class="dropdown hidden">
+                <a href="#" id="menu-manage">Manage add-on</a>
+                <a href="#" id="menu-logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- LOGIN VIEW -->
+    <section id="login-view" class="view active">
+        <div class="login-header">
+            <img src="logo.png" alt="Logo" class="login-logo" />
+            <h2>RealEye AI CRM</h2>
+            <p>AI-Powered Relationship Management</p>
+        </div>
+        <div class="card">
+            <h3 style="margin-top:0;">🔐 Login to RealEye CRM</h3>
+            <div id="login-error" class="error-msg hidden"></div>
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="login-email" placeholder="your@company.com" />
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="login-password" />
+            </div>
+            <p class="login-helper">Enter your credentials to securely sync your Outlook contacts with RealEye CRM. Your
+                data is encrypted and saved securely.</p>
+            <button id="login-btn" class="primary-btn">Login</button>
+        </div>
+    </section>
+
+    <!-- LIST VIEW (Recent Emails) -->
+    <section id="list-view" class="view">
+        <div class="toolbar card">
+            <button id="refresh-list-btn" class="outlined-btn">🔄 Refresh</button>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title" style="margin-top:0;">👥 Recent Email Contacts</h3>
+            <div id="recent-contacts-list" class="list-container">
+                <!-- Dynamically populated rows -->
+                <p class="placeholder-text">Loading...</p>
+            </div>
+            <button id="load-more-btn" class="primary-btn" style="margin-top: 15px;">📥 Load More</button>
+        </div>
+    </section>
+
+    <!-- DETAIL VIEW -->
+    <section id="detail-view" class="view">
+        <div class="toolbar" style="margin-bottom: 10px;">
+            <button id="back-to-list-btn" class="text-btn" style="font-size:14px; font-weight:bold;">← Back to
+                Inbox</button>
+        </div>
+
+        <div class="card">
+            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <div class="avatar" id="detail-avatar"></div>
+                <div>
+                    <h3 id="ui-name" style="margin:0 0 2px 0; font-size: 14px;">Name</h3>
+                    <p id="ui-email" style="margin:0; font-size: 11px; color:#5f6368;">email</p>
+                </div>
+            </div>
+
+            <!-- Extracted Details Section -->
+            <h4 style="margin: 15px 0 10px 0; font-size: 12px; border-bottom: 1px solid #eee; padding-bottom: 5px;">📋
+                AI-Extracted Details</h4>
+            <div class="extracted-details" style="font-size: 12px; line-height: 1.5;">
+                <div style="display: flex; margin-bottom: 8px;">
+                    <span style="font-size: 14px; margin-right: 8px; width: 16px;">✉️</span>
+                    <div>
+                        <div style="color: #5f6368; font-size: 10px;">Email</div>
+                        <div id="ui-email-ext" style="font-weight: 500; word-break: break-all;">-</div>
+                    </div>
+                </div>
+                <div style="display: flex; margin-bottom: 8px;">
+                    <span style="font-size: 14px; margin-right: 8px; width: 16px;">👤</span>
+                    <div>
+                        <div style="color: #5f6368; font-size: 10px;">Full Name</div>
+                        <div id="ui-name-ext" style="font-weight: 500;">-</div>
+                    </div>
+                </div>
+                <div style="display: flex; margin-bottom: 8px;">
+                    <span style="font-size: 14px; margin-right: 8px; width: 16px;">📞</span>
+                    <div>
+                        <div style="color: #5f6368; font-size: 10px;">Phone</div>
+                        <div id="ui-phone" style="font-weight: 500;">-</div>
+                    </div>
+                </div>
+                <div style="display: flex; margin-bottom: 8px;">
+                    <span style="font-size: 14px; margin-right: 8px; width: 16px;">🏢</span>
+                    <div>
+                        <div style="color: #5f6368; font-size: 10px;">Company</div>
+                        <div id="ui-company" style="font-weight: 500;">-</div>
+                    </div>
+                </div>
+
+                <div id="hidden-details" class="hidden">
+                    <div style="display: flex; margin-bottom: 8px;">
+                        <span style="font-size: 14px; margin-right: 8px; width: 16px;">📍</span>
+                        <div>
+                            <div style="color: #5f6368; font-size: 10px;">Location</div>
+                            <div id="ui-location" style="font-weight: 500;">-</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; margin-bottom: 8px;">
+                        <span style="font-size: 14px; margin-right: 8px; width: 16px;">🏷️</span>
+                        <div>
+                            <div style="color: #5f6368; font-size: 10px;">Status</div>
+                            <div id="ui-status" style="font-weight: bold; color: #1a73e8;">-</div>
+                        </div>
+                    </div>
+                </div>
+                <button id="toggle-details-btn" class="outlined-btn btn-small"
+                    style="margin-top:5px; border-radius: 12px; font-size: 11px; padding: 4px 10px; width: auto; color: #1a73e8; border-color: #1a73e8;">Show
+                    less ⏶</button>
+            </div>
+
+            <div class="actions" style="margin-top: 20px;">
+                <button id="create-contact-btn" class="success-btn" style="margin-bottom: 8px;">➕ Create
+                    Contact</button>
+                <button id="open-crm-btn" class="outlined-btn">Open CRM</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shared Footer -->
+    <footer class="app-footer" id="app-footer" style="display: none;">
+        <div class="card"
+            style="display:flex; justify-content:space-between; align-items:center; padding: 10px 15px; border-top: 1px solid #eee; box-shadow: 0 -2px 5px rgba(0,0,0,0.02);">
+            <div style="display: flex; align-items: center;">
+                <div class="avatar" style="width: 24px; height: 24px; font-size: 10px; margin-right: 8px;"
+                    id="footer-avatar">👤</div>
+                <div>
+                    <p style="margin:0; font-size: 10px; color:#5f6368;">Signed into RealEye as</p>
+                    <p id="footer-username" style="margin:0; font-weight: bold; font-size: 12px;">user</p>
+                    <p id="footer-email" style="margin:0; font-size: 10px; color:#5f6368;">user@example.com</p>
+                </div>
+            </div>
+            <button id="footer-logout-btn" class="outlined-btn btn-small"
+                style="width: auto; padding: 4px 8px; font-size: 11px;">Log out</button>
+        </div>
+    </footer>
+
+    <script src="taskpane.js"></script>
+</body>
+
+</html>
