@@ -567,12 +567,26 @@ function showManualLoginPrompt(container) {
     `;
     
     document.getElementById('manual-auth-btn').onclick = () => {
-       
-        // Replace YOUR_CLIENT_ID with the Application (client) ID from your Azure Overview page
-        const clientID = "b47febaf-cc5b-4be3-b480-63702e916d44"; 
-        const redirectUri = "https://wonderful-flower-067571610.7.azurestaticapps.net/taskpane.html";
-        const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientID}&response_type=token&scope=openid%20profile%20User.Read%20Mail.Read&redirect_uri=${redirectUri}`;
+     const clientID = "b47febaf-cc5b-4be3-b480-63702e916d44"; 
+     const redirectUri = "https://wonderful-flower-067571610.7.azurestaticapps.net/taskpane.html";
+     const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientID}&response_type=token&scope=openid%20profile%20User.Read%20Mail.Read&redirect_uri=${redirectUri}`;
 
-        Office.context.ui.displayDialogAsync(authUrl, { height: 60, width: 40 });
+        // This version includes the event handler to catch the token from the popup
+        Office.context.ui.displayDialogAsync(authUrl, { height: 60, width: 40 }, (asyncResult) => {
+            if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+                const dialog = asyncResult.value;
+            
+                // This listens for the "shout" from the script you added to taskpane.html
+                dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
+                    console.log("Token received from popup");
+                
+                  // 1. Close the popup window automatically
+                    dialog.close();
+                
+                  // 2. Refresh the contact list now that we have permission
+                    loadRecentContacts(true); 
+                });
+            }
+        });
     };
 }
