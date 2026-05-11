@@ -8,6 +8,14 @@
     <title>RealEye AI CRM for Outlook</title>
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
     <link rel="stylesheet" href="taskpane.css" />
+    <script>
+        Office.onReady(() => {
+            if (window.location.hash) {
+                // This captures the token from the URL and sends it to your taskpane.js
+                Office.context.ui.messageParent(window.location.hash);
+            }
+        });
+    </script>
 </head>
 
 <body>
