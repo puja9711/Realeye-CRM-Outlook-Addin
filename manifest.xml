@@ -7,7 +7,7 @@
 
   <!-- ==================== BASIC APP INFO ==================== -->
   <Id>b47febaf-cc5b-4be3-b480-63702e916d44</Id>
-  <Version>1.0.0.4</Version>
+  <Version>1.0.0.6</Version>
   <ProviderName>RealEye AI</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="RealEye AI CRM for Outlook"/>
