@@ -397,17 +397,17 @@ function loadRecentContacts(isRefresh = true) {
 
     // Step 2: Get OAuth callback token from Office runtime
     Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function(tokenResult) {
+       
         if (tokenResult.status !== Office.AsyncResultStatus.Succeeded) {
             const errCode = tokenResult.error ? tokenResult.error.code : 'unknown';
-            const errMsg  = tokenResult.error ? tokenResult.error.message : 'Unknown error';
-            console.error('getCallbackTokenAsync failed — code:', errCode, '| msg:', errMsg);
-            listContainer.innerHTML = `
-                <div style="padding:15px; text-align:center;">
-                    <p style="color:#d93025; font-size:12px; margin-bottom:6px;">❌ Auth failed (code: ${errCode})</p>
-                    <p style="color:#5f6368; font-size:11px;">${errMsg}</p>
-                    <p style="color:#5f6368; font-size:10px; margin-top:8px;">An internal connection error occurred. Please refresh or contact support at realeye.live/support.</p>
-                </div>
-            `;
+            
+            if (errCode === 9018 || errCode === 13007) {
+                // INSTEAD OF SHOWING RED TEXT, SHOW THE LOGIN PROMPT
+                showManualLoginPrompt(listContainer);
+            } else {
+                // Show standard error for other issues
+                listContainer.innerHTML = `<p style="color:red;">Auth Error: ${errCode}</p>`;
+            }
             return;
         }
 
@@ -552,4 +552,27 @@ function formatContactStatus(statusId) {
     'OPEN_DEAL': 'Open Deal', 'UNQUALIFIED': 'Unqualified', 'CONNECTED': 'Connected'
   };
   return statuses[statusId] || statusId || '-';
+}
+
+function showManualLoginPrompt(container) {
+    container.innerHTML = `
+        <div style="padding:20px; text-align:center;">
+            <p style="font-size:13px; color:#5f6368; margin-bottom:15px;">
+                Outlook requires a manual sign-in to sync your inbox.
+            </p>
+            <button id="manual-auth-btn" style="background:#1a73e8; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer;">
+                Sign in to Outlook
+            </button>
+        </div>
+    `;
+    
+    document.getElementById('manual-auth-btn').onclick = () => {
+       
+        // Replace YOUR_CLIENT_ID with the Application (client) ID from your Azure Overview page
+        const clientID = "b47febaf-cc5b-4be3-b480-63702e916d44"; 
+        const redirectUri = "https://wonderful-flower-067571610.7.azurestaticapps.net/taskpane.html";
+        const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientID}&response_type=token&scope=openid%20profile%20User.Read%20Mail.Read&redirect_uri=${redirectUri}`;
+
+        Office.context.ui.displayDialogAsync(authUrl, { height: 60, width: 40 });
+    };
 }
