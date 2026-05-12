@@ -413,15 +413,21 @@ function loadRecentContacts(isRefresh = true) {
 
         const accessToken = tokenResult.value;
 
-        // Build Outlook REST API URL to fetch inbox messages
-        const apiUrl = `${restUrl}/v2.0/me/MailFolders/Inbox/messages` +
-            `?$top=${INBOX_PAGE_SIZE}` +
-            `&$skip=${inboxPageSkip}` +
-            `&$select=from,receivedDateTime,subject,isRead` +
-            `&$orderby=receivedDateTime desc`;
+        // 1. ADD THIS LINE HERE to define the header logic
+        const authHeader = window.outlookManualToken 
+        ? `Bearer ${window.outlookManualToken}` 
+        : `Bearer ${accessToken}`;
 
+        // Build Outlook REST API URL
+        const apiUrl = `${restUrl}/v2.0/me/MailFolders/Inbox/messages` +
+        `?$top=${INBOX_PAGE_SIZE}` +
+        `&$skip=${inboxPageSkip}` +
+        `&$select=from,receivedDateTime,subject,isRead` +
+        `&$orderby=receivedDateTime desc`;
+
+        // 2. UPDATE THIS FETCH to use authHeader instead of accessToken
         fetch(apiUrl, {
-            headers: { 'Authorization': `Bearer ${accessToken}` }
+            headers: { 'Authorization': authHeader }
         })
         .then(res => {
             if (!res.ok) throw new Error(`Outlook API error: ${res.status}`);
@@ -578,13 +584,20 @@ function showManualLoginPrompt(container) {
             
                 // This listens for the "shout" from the script you added to taskpane.html
                 dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
-                    console.log("Token received from popup");
-                
-                  // 1. Close the popup window automatically
+                    // 1. Close the popup
                     dialog.close();
-                
-                  // 2. Refresh the contact list now that we have permission
-                    loadRecentContacts(true); 
+    
+                    // 2. Extract token from the hash string (#access_token=...)
+                 const hash = arg.message;
+                 const tokenMatch = hash.match(/access_token=([^&]+)/);
+    
+                    if (tokenMatch && tokenMatch[1]) {
+                        // Save this token globally so the fetch function can find it
+                        window.outlookManualToken = tokenMatch[1];
+        
+                        // 3. Refresh the contact list
+                        loadRecentContacts(true); 
+                    }
                 });
             }
         });
