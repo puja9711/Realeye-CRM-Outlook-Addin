@@ -201,12 +201,21 @@ async function handleConnectMailbox(e) {
 // --- Main Detail View Logic ---
 
 function loadCurrentContactData() {
-    const item = Office.context.mailbox.item; 
+    const item = Office.context.mailbox.item;
+ 
+    // FIX: item is null when taskpane is pinned and no email is open.
+    // Previously this crashed silently (item.from on null), blanking the entire pane.
+    if (!item || !item.from) {
+        showView('list');
+        loadRecentContacts(true);
+        return;
+    }
+ 
     const email = item.from.emailAddress;
     const name = item.from.displayName;
     
     document.getElementById('back-to-list-btn').style.display = 'block';
-
+ 
     renderDetailHeader(email, name);
     fetchCrmStatus(email, name, item);
 }
@@ -574,7 +583,7 @@ function showManualLoginPrompt(container) {
     
     document.getElementById('manual-auth-btn').onclick = () => {
         const clientID = "b47febaf-cc5b-4be3-b480-63702e916d44"; 
-        const redirectUri = "https://wonderful-flower-067571610.7.azurestaticapps.net/taskpane.html";
+        const redirectUri = "https://wonderful-flower-067571610.7.azurestaticapps.net/auth-callback.html";
         const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientID}&response_type=token&scope=openid%20profile%20User.Read%20Mail.Read&redirect_uri=${redirectUri}`;
 
         // This version includes the event handler to catch the token from the popup
