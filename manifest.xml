@@ -21,6 +21,7 @@
     <AppDomain>https://wonderful-flower-067571610.7.azurestaticapps.net</AppDomain>
     <AppDomain>https://api.realeye.live</AppDomain>
     <AppDomain>https://login.microsoftonline.com</AppDomain>
+    <AppDomain>https://login.live.com</AppDomain>
 </AppDomains>
 
   <Hosts>
