@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script>
+    Office.onReady(() => {
+      // Check if there is a token in the URL
+      if (window.location.hash) {
+        // Send the token back to taskpane.js and close this popup
+        Office.context.ui.messageParent(window.location.hash);
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <p style="text-align: center; font-family: sans-serif; margin-top: 50px;">
+    Authenticating...
+  </p>
+</body>
+
+</html>
