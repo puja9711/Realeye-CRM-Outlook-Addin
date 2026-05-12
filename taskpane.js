@@ -395,17 +395,17 @@ function loadRecentContacts(isRefresh = true) {
         return;
     }
 
+    
     // Step 2: Get OAuth callback token from Office runtime
     Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function(tokenResult) {
        
         if (tokenResult.status !== Office.AsyncResultStatus.Succeeded) {
             const errCode = tokenResult.error ? tokenResult.error.code : 'unknown';
             
+            // Check for the 9018 error to trigger the manual fallback
             if (errCode === 9018 || errCode === 13007) {
-                // INSTEAD OF SHOWING RED TEXT, SHOW THE LOGIN PROMPT
                 showManualLoginPrompt(listContainer);
             } else {
-                // Show standard error for other issues
                 listContainer.innerHTML = `<p style="color:red;">Auth Error: ${errCode}</p>`;
             }
             return;
@@ -413,19 +413,19 @@ function loadRecentContacts(isRefresh = true) {
 
         const accessToken = tokenResult.value;
 
-        // 1. ADD THIS LINE HERE to define the header logic
+        // NEW: Logic to use manual token if it exists, otherwise use the automatic one
         const authHeader = window.outlookManualToken 
-        ? `Bearer ${window.outlookManualToken}` 
-        : `Bearer ${accessToken}`;
+            ? `Bearer ${window.outlookManualToken}` 
+            : `Bearer ${accessToken}`;
 
-        // Build Outlook REST API URL
+        // Build Outlook REST API URL to fetch inbox messages
         const apiUrl = `${restUrl}/v2.0/me/MailFolders/Inbox/messages` +
-        `?$top=${INBOX_PAGE_SIZE}` +
-        `&$skip=${inboxPageSkip}` +
-        `&$select=from,receivedDateTime,subject,isRead` +
-        `&$orderby=receivedDateTime desc`;
+            `?$top=${INBOX_PAGE_SIZE}` +
+            `&$skip=${inboxPageSkip}` +
+            `&$select=from,receivedDateTime,subject,isRead` +
+            `&$orderby=receivedDateTime desc`;
 
-        // 2. UPDATE THIS FETCH to use authHeader instead of accessToken
+        // NEW: Fetch using the authHeader variable
         fetch(apiUrl, {
             headers: { 'Authorization': authHeader }
         })
@@ -573,23 +573,23 @@ function showManualLoginPrompt(container) {
     `;
     
     document.getElementById('manual-auth-btn').onclick = () => {
-     const clientID = "b47febaf-cc5b-4be3-b480-63702e916d44"; 
-     const redirectUri = "https://wonderful-flower-067571610.7.azurestaticapps.net/taskpane.html";
-     const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientID}&response_type=token&scope=openid%20profile%20User.Read%20Mail.Read&redirect_uri=${redirectUri}`;
+        const clientID = "b47febaf-cc5b-4be3-b480-63702e916d44"; 
+        const redirectUri = "https://wonderful-flower-067571610.7.azurestaticapps.net/taskpane.html";
+        const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientID}&response_type=token&scope=openid%20profile%20User.Read%20Mail.Read&redirect_uri=${redirectUri}`;
 
         // This version includes the event handler to catch the token from the popup
         Office.context.ui.displayDialogAsync(authUrl, { height: 60, width: 40 }, (asyncResult) => {
             if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
                 const dialog = asyncResult.value;
             
-                // This listens for the "shout" from the script you added to taskpane.html
+                // This listens for the "shout" from the script in taskpane.html
                 dialog.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
                     // 1. Close the popup
                     dialog.close();
     
                     // 2. Extract token from the hash string (#access_token=...)
-                 const hash = arg.message;
-                 const tokenMatch = hash.match(/access_token=([^&]+)/);
+                    const hash = arg.message;
+                    const tokenMatch = hash.match(/access_token=([^&]+)/);
     
                     if (tokenMatch && tokenMatch[1]) {
                         // Save this token globally so the fetch function can find it
