@@ -27,7 +27,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
           ###### Repository/Build Configurations Configurations ######
-          app_location: "/" # App source code path
+          app_location: "." # App source code path
           api_location: "" # Api source code path - optional
           output_location: "" # FIX: Must be empty string when skip_app_build is true!
           skip_app_build: true
